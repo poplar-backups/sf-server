@@ -1,0 +1,7 @@
+Engine/
+FactoryGame/
+steamapps/
+*.exe
+*.txt
+*.dll
+launcher_id
