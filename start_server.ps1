@@ -1,5 +1,12 @@
 # Wrapper PS script to automate firewall checks + world backups
 
+param (
+    # How frequently to backup saves, in seconds
+    [int]$backupsec = (15 * 60),
+    # Skips launch and attaches to existing server instance
+    [switch]$attach = $false
+ )
+
 $firewallRuleName = "Satisfactory default inbound ports"
 $maybeRule = Get-NetFirewallRule -DisplayName $firewallRuleName 2> $null;
 if ($maybeRule) {
@@ -9,13 +16,15 @@ if ($maybeRule) {
 	New-NetFirewallRule -DisplayName $firewallRuleName -Direction Inbound -Action Allow -EdgeTraversalPolicy Allow -Protocol UDP -LocalPort 15000,15777,7777
 }
 
-.\FactoryServer.exe -multihome=0.0.0.0 -log -unattended
+if (!$attach) {
+    .\FactoryServer.exe -multihome=0.0.0.0 -log -unattended
+}
 
 try
 {
     While($true)
     {
-        Start-Sleep -Seconds (60 * 60 * 3)
+        Start-Sleep -Seconds $backupsec
         New-Item -ItemType Directory -Path "$PSScriptRoot\saves" -Force
         Copy-Item -Path "$env:LOCALAPPDATA\FactoryGame\Saved\SaveGames\server\*" -Destination "$PSScriptRoot\saves" -Recurse
         git add *
