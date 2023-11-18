@@ -26,5 +26,9 @@ try
 
 finally
 {
-    taskkill /im FactoryServer*
+    taskkill /im FactoryServer* /F
+    taskkill /im UnrealServer-Win64-Shipping* /F
+    git add *
+    git commit -m "Stopping Save $((Get-Date).ToString())"
+    git push
 }
