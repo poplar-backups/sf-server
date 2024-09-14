@@ -12,8 +12,8 @@ $maybeRule = Get-NetFirewallRule -DisplayName $firewallRuleName 2> $null;
 if ($maybeRule) {
 	write-host "Firewall rule exists, skipping creation"
 } else {
-	write-host "Creating firewall rules for ports 15000, 15777, 7777"
-	New-NetFirewallRule -DisplayName $firewallRuleName -Direction Inbound -Action Allow -EdgeTraversalPolicy Allow -Protocol UDP -LocalPort 15000,15777,7777
+	write-host "Creating firewall rules for ports 7777"
+	New-NetFirewallRule -DisplayName $firewallRuleName -Direction Inbound -Action Allow -EdgeTraversalPolicy Allow -Protocol UDP -LocalPort 7777
 }
 
 if (!$attach) {
